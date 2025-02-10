@@ -122,9 +122,9 @@ function ChatPanel({lastLevel, visible = true}) {
 
   useEffect(() => {
     // TODO: For some reason this is always called twice
-    console.debug('scroll chat')
+    console.log('scroll chat')
     if (!mobile) {
-      chatRef.current!.lastElementChild?.scrollIntoView() //scrollTo(0,0)
+      chatRef.current!.lastElementChild?.scrollTo(0,0) //scrollIntoView() //scrollTo(0,0)
     }
   }, [proof, showHelp])
 
@@ -434,7 +434,7 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
                     </div>
                   </>
                 :
-                  <Split minSize={0} snapOffset={200} sizes={[25, 50, 25]} className={`app-content level ${level.isLoading ? 'hidden' : ''}`}>
+                  <Split minSize={0} snapOffset={200} sizes={[50, 40, 10]} className={`app-content level ${level.isLoading ? 'hidden' : ''}`}>
                     <ChatPanel lastLevel={lastLevel}/>
                     <ExercisePanel
                       codeviewRef={codeviewRef} />
