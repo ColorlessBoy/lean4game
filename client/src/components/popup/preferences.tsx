@@ -39,6 +39,8 @@ export function PreferencesPopup({ handleClose }: { handleClose: () => void }) {
   }
 
   const handlerChangeLanguage = (ev: SelectChangeEvent<string>) => {
+    console.log("preference pre", language)
+    console.log("preference", ev.target.value)
     setLanguage(ev.target.value as IPreferencesContext["language"])
   }
 

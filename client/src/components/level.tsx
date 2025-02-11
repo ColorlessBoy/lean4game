@@ -560,6 +560,7 @@ function useLevelEditor(codeviewRef, initialCode, initialSelections, onDidChange
 
   useEffect(() => {
     const model = monaco.editor.createModel(initialCode ?? '', 'lean4', uri)
+    console.log("levelEditor: ", initialCode)
     if (onDidChangeContent) {
       model.onDidChangeContent(() => onDidChangeContent(model.getValue()))
     }

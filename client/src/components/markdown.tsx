@@ -13,10 +13,7 @@ function Markdown(props) {
   const newProps = {
     ...props,
     remarkPlugins: [...(props.remarkPlugins ?? []), remarkMath, gfm],
-    rehypePlugins: [
-      ...(props.remarkPlugins ?? []),
-      rehypeKatex,
-    ],
+    rehypePlugins: [...(props.remarkPlugins ?? []), rehypeKatex],
   };
   return (
     <MarkdownPreview
@@ -87,5 +84,14 @@ const Code = ({ inline, children = [], className, ...props }) => {
       </Fragment>
     );
   }
-  return <code>{children}</code>;
+  return (
+    <code
+      style={{ whiteSpace: inline ? "nowrap" : "pre-wrap" }} // 处理行内代码和块级代码
+      className={className}
+      {...props}
+      id={demoid.current}
+    >
+      {children}
+    </code>
+  );
 };

@@ -175,7 +175,7 @@ def completionDiagnostics (goalCount : Nat) (prevGoalCount : Nat) (completed : B
         -- needs to translate these messages again,
         -- but cannot think of another option
         -- that would not involve manually adding them somewhere in the translation files.
-        message := .text t!"level completed! 🎉"
+        message := .text t!"Level completed! 🎉"
         range := {
           start := pos
           «end» := pos
