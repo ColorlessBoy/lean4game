@@ -1,18 +1,20 @@
 import * as React from "react";
 import { useState, useRef, useEffect, Fragment, useCallback } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you
 import gfm from "remark-gfm";
 
 import { getCodeString } from "rehype-rewrite";
 import mermaid from "mermaid";
+import katex from "katex";
+import "katex/dist/katex.css";
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 function Markdown(props) {
   const newProps = {
     ...props,
-    remarkPlugins: [...(props.remarkPlugins ?? []), remarkMath, gfm],
+    remarkPlugins: [...(props.remarkPlugins ?? []), gfm, remarkMath],
     rehypePlugins: [...(props.remarkPlugins ?? []), rehypeKatex],
   };
   return (
@@ -50,6 +52,8 @@ const Code = ({ inline, children = [], className, ...props }) => {
   const [container, setContainer] = useState(null);
   const isMermaid =
     className && /^language-mermaid/.test(className.toLocaleLowerCase());
+  const isKatex =
+    className && (/^language-katex/.test(className.toLocaleLowerCase()) || /^language-latex/.test(className.toLocaleLowerCase()) || /^language-math/.test(className.toLocaleLowerCase()));
   const code =
     props.node && props.node.children
       ? getCodeString(props.node.children)
@@ -75,6 +79,31 @@ const Code = ({ inline, children = [], className, ...props }) => {
       setContainer(node);
     }
   }, []);
+
+  if (/^\$\$(.*)\$\$/.test(code)) {
+    console.log("code", code);
+    const html = katex.renderToString(code.replace(/^\$\$(.*)\$\$/, "$1"), {
+      throwOnError: false,
+    });
+    return (
+      <code
+        dangerouslySetInnerHTML={{ __html: html }}
+        style={{ background: "transparent" }}
+      />
+    );
+  }
+
+  if (isKatex) {
+    const html = katex.renderToString(code, {
+      throwOnError: false,
+    });
+    return (
+      <code
+        style={{ fontSize: "150%" }}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
+  }
 
   if (isMermaid) {
     return (

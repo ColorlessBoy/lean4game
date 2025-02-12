@@ -305,6 +305,9 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
   // a hint at the beginning of the proof...
   const [selectedStep, setSelectedStep] = useState<number>()
 
+  const lineNumbers = level?.data?.introduction?.split(/\n(\s*\n)+/).length
+  const [introSize, setIntroSize] = useState<number>(lineNumbers >= 10 ? 45 : 20)
+
 
   useEffect (() => {
     // Lock editor mode
@@ -339,6 +342,8 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
     } else {
       setLockEditorMode(false)
     }
+    const lineNumbers = level?.data?.introduction?.split(/\n(\s*\n)+/).length
+    setIntroSize(lineNumbers >= 10 ? 45 : 25)
   }, [level, levelId, worldId, gameId, editor])
 
 
@@ -434,7 +439,7 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
                     </div>
                   </>
                 :
-                  <Split minSize={0} snapOffset={200} sizes={[50, 40, 10]} className={`app-content level ${level.isLoading ? 'hidden' : ''}`}>
+                  <Split minSize={0} snapOffset={200} sizes={[introSize, 40, 60-introSize]} className={`app-content level ${level.isLoading ? 'hidden' : ''}`}>
                     <ChatPanel lastLevel={lastLevel}/>
                     <ExercisePanel
                       codeviewRef={codeviewRef} />
