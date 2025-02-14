@@ -343,7 +343,7 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
       setLockEditorMode(false)
     }
     const lineNumbers = level?.data?.introduction?.split(/\n(\s*\n)+/).length
-    setIntroSize(lineNumbers >= 10 ? 45 : 25)
+    setIntroSize(lineNumbers >= 5 ? 45 : 25)
   }, [level, levelId, worldId, gameId, editor])
 
 
