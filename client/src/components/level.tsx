@@ -199,6 +199,18 @@ function ChatPanel({lastLevel, visible = true}) {
   </div>
 }
 
+/*
+<LevelAppBar
+  pageNumber={pageNumber} setPageNumber={setPageNumber}
+  isLoading={level.isLoading}
+  levelTitle={(mobile ? "" : t("Level")) + ` ${levelId} / ${gameInfo.data?.worldSize[worldId]}` +
+    (level?.data?.title && ` : ${t(level?.data?.title, {ns: gameId})}`)}
+  toggleImpressum={toggleImpressum}
+  toggleInfo={toggleInfo}
+  togglePreferencesPopup={togglePreferencesPopup}
+  />
+*/
+
 
 function ExercisePanel({codeviewRef, visible=true}: {codeviewRef: React.MutableRefObject<HTMLDivElement>, visible?: boolean}) {
   const gameId = React.useContext(GameIdContext)
@@ -274,31 +286,6 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
 
   const {editor, infoProvider, editorConnection} =
     useLevelEditor(codeviewRef, initialCode, initialSelections, onDidChangeContent, onDidChangeSelection)
-
-  /** Unused. Was implementing an undo button, which has been replaced by `deleteProof` inside
-   * `TypewriterInterface`.
-   */
-  const handleUndo = () => {
-    const endPos = editor.getModel().getFullModelRange().getEndPosition()
-    let range
-    console.log(endPos.column)
-    if (endPos.column === 1) {
-      range = monaco.Selection.fromPositions(
-        new monaco.Position(endPos.lineNumber - 1, 1),
-        endPos
-      )
-    } else {
-      range = monaco.Selection.fromPositions(
-        new monaco.Position(endPos.lineNumber, 1),
-        endPos
-      )
-    }
-    editor.executeEdits("undo-button", [{
-      range,
-      text: "",
-      forceMoveMarkers: false
-    }]);
-  }
 
   // Select and highlight proof steps and corresponding hints
   // TODO: with the new design, there is no difference between the introduction and
@@ -393,21 +380,6 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
         text: code.length ? code.join('\n') + '\n' : '',
         forceMoveMarkers: true
       }]);
-
-      // let endPos = editor.getModel().getFullModelRange().getEndPosition()
-      // if (editor.getModel().getLineContent(endPos.lineNumber).trim() !== "") {
-      //   editor.executeEdits("typewriter", [{
-      //     range: monaco.Selection.fromPositions(endPos, endPos),
-      //     text: "\n",
-      //     forceMoveMarkers: true
-      //   }]);
-      // }
-      // let endPos = editor.getModel().getFullModelRange().getEndPosition()
-      // let currPos = editor.getPosition()
-      // if (currPos.column != 1 || (currPos.lineNumber != endPos.lineNumber && currPos.lineNumber != endPos.lineNumber - 1)) {
-      //   // This is not a position that would naturally occur from Typewriter, reset:
-      //   editor.setSelection(monaco.Selection.fromPositions(endPos, endPos))
-      // }
     }
   }, [editor, typewriterMode, lockEditorMode, onigasmH == null])
 
@@ -419,15 +391,6 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
           <ProofContext.Provider value={{proof, setProof, interimDiags, setInterimDiags, crashed: isCrashed, setCrashed: setIsCrashed}}>
             <EditorContext.Provider value={editorConnection}>
               <MonacoEditorContext.Provider value={editor}>
-                <LevelAppBar
-                  pageNumber={pageNumber} setPageNumber={setPageNumber}
-                  isLoading={level.isLoading}
-                  levelTitle={(mobile ? "" : t("Level")) + ` ${levelId} / ${gameInfo.data?.worldSize[worldId]}` +
-                    (level?.data?.title && ` : ${t(level?.data?.title, {ns: gameId})}`)}
-                  toggleImpressum={toggleImpressum}
-                  toggleInfo={toggleInfo}
-                  togglePreferencesPopup={togglePreferencesPopup}
-                  />
                 {mobile?
                   // TODO: This is copied from the `Split` component below...
                   <>

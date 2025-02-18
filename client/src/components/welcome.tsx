@@ -67,6 +67,12 @@ function IntroductionPanel({introduction, setPageNumber}: {introduction: string,
   </div>
 }
 
+/*
+<WelcomeAppBar pageNumber={pageNumber} setPageNumber={setPageNumber} gameInfo={gameInfo.data} toggleImpressum={toggleImpressum}
+  toggleEraseMenu={toggleEraseMenu} toggleUploadMenu={toggleUploadMenu}
+  toggleInfo={toggleInfo} togglePreferencesPopup={togglePreferencesPopup}/>
+*/
+
 /** main page of the game showing among others the tree of worlds/levels */
 function Welcome() {
   const gameId = React.useContext(GameIdContext)
@@ -116,26 +122,17 @@ function Welcome() {
       <CircularProgress />
     </Box>
   : <>
-    <WelcomeAppBar pageNumber={pageNumber} setPageNumber={setPageNumber} gameInfo={gameInfo.data} toggleImpressum={toggleImpressum}
-      toggleEraseMenu={toggleEraseMenu} toggleUploadMenu={toggleUploadMenu}
-      toggleInfo={toggleInfo} togglePreferencesPopup={togglePreferencesPopup}/>
     <div className="app-content">
       { mobile ?
           <div className="welcome mobile">
             {(pageNumber == 0 ?
               <IntroductionPanel introduction={gameInfo.data?.introduction} setPageNumber={setPageNumber} />
-            : pageNumber == 1 ?
-              <WorldTocPanel worlds={gameInfo.data?.worlds} worldToc={gameInfo.data?.worldToc} worldSize={gameInfo.data?.worldSize}
-                rulesHelp={rulesHelp} setRulesHelp={setRulesHelp} />
-            :
-              <InventoryPanel levelInfo={inventory?.data} />
+            : <InventoryPanel levelInfo={inventory?.data} />
             )}
           </div>
         :
-          <Split className="welcome" minSize={0} snapOffset={200}  sizes={[25, 50, 25]}>
+          <Split className="welcome" minSize={0} snapOffset={200}  sizes={[60, 40]}>
             <IntroductionPanel introduction={gameInfo.data?.introduction} setPageNumber={setPageNumber} />
-            <WorldTocPanel worlds={gameInfo.data?.worlds} worldToc={gameInfo.data?.worldToc} worldSize={gameInfo.data?.worldSize}
-              rulesHelp={rulesHelp} setRulesHelp={setRulesHelp} />
             <InventoryPanel levelInfo={inventory?.data} />
           </Split>
       }

@@ -58,7 +58,7 @@ export function Layout({
           trigger={null}
           collapsible
           collapsed={isCollapsed}
-          width={mobile ? '100%' : 300}
+          width={300}
           collapsedWidth={0}
           style={{
             overflow: 'auto',
@@ -68,7 +68,7 @@ export function Layout({
             top: 0,
             bottom: 0,
             zIndex: mobile ? 1001 : 1,
-            transform: `translateX(${isCollapsed ? (mobile ? '-100%' : '-300px') : '0'})`,
+            transform: `translateX(${isCollapsed ? '-300px' : '0'})`,
             transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
           onTouchStart={handleTouchStart}
@@ -108,7 +108,25 @@ export function Layout({
           </div>
         </Sider>
       )}
-
+      {mobile && !isCollapsed && (
+        <div
+          role="button"
+          tabIndex={10}
+          aria-label="Close sidebar"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.45)',
+            zIndex: 900,
+            cursor: 'pointer',
+            WebkitTapHighlightColor: 'transparent'
+          }}
+          onClick={() => setIsCollapsed(true)}
+        />
+      )}
       <AntLayout style={{
         marginLeft: showSidebar && !isCollapsed && !mobile ? 300 : 0,
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -117,7 +135,7 @@ export function Layout({
       }}>
 
         <Header style={{
-          padding: '0 16px',
+          padding: '0 12px',
           background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
           display: 'flex',
           alignItems: 'center',
@@ -126,7 +144,8 @@ export function Layout({
           position: 'sticky',
           top: 0,
           width: '100%',
-          zIndex: 800
+          zIndex: 800,
+          height: '48px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {showSidebar && (
@@ -135,22 +154,20 @@ export function Layout({
                 icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 style={{
-                  fontSize: '16px',
-                  width: 40,
-                  height: 40,
-                  color: '#fff'
+                  fontSize: '20px',
+                  width: 32,
+                  height: 32,
+                  color: '#fff',
+                  padding: '0px',
+                  margin: '0px'
                 }}
               />
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ color: '#fff', marginRight: '8px' }}>Guest</span>
-            <Avatar icon={<UserOutlined />} />
-          </div>
         </Header>
         <Content style={{
-          margin: '24px 16px',
-          padding: 24,
+          margin: 0,
+          padding: 0,
           minHeight: 280,
           overflow: 'auto'
         }}>
