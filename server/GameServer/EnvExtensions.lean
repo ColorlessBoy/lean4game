@@ -397,11 +397,18 @@ structure Game where
   image : String := default
 deriving Inhabited, ToJson, FromJson
 
+def getLevelsToc (levels : HashMap Nat GameLevel) : Json := Id.run do
+  let mut toc := []
+  for (levelId, level) in levels.toList do
+    toc := (toString levelId, Json.str level.title) :: toc
+  return Json.mkObj toc
+
 def getGameJson (game : «Game») : Json := Id.run do
   let gameJson : Json := toJson game
   -- Add world sizes to Json object
   let worldSize := game.worlds.nodes.toList.map (fun (n, w) => (n.toString, w.levels.size))
-  let gameJson := gameJson.mergeObj (Json.mkObj [("worldSize", Json.mkObj worldSize)])
+  let worldToc := game.worlds.nodes.toList.map (fun (n, w) => (n.toString, getLevelsToc w.levels))
+  let gameJson := gameJson.mergeObj (Json.mkObj [("worldSize", Json.mkObj worldSize), ("worldToc", Json.mkObj worldToc)])
   return gameJson
 
 /-! ## Game environment extension -/
