@@ -15,12 +15,25 @@ export interface GameTile {
   image: string
 }
 
+export interface WorldType {
+  nodes: {
+    id: string,
+    title: string,
+    introduction: string,
+    image: string
+  },
+  edges: string[][]
+}
+
+export type WorldTocType = Map<string, string[]>
+
 export interface GameInfo {
   title: null|string,
   introduction: null|string,
   info: null|string,
-  worlds: null|{nodes: {[id:string]: {id: string, title: string, introduction: string, image: string}}, edges: string[][]},
+  worlds: null|WorldType,
   worldSize: null|{[key: string]: number},
+  worldToc: null|WorldTocType,
   authors: null|string[],
   conclusion: null|string,
   tile: null|GameTile,

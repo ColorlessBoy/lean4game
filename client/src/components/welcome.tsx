@@ -25,6 +25,7 @@ import { WelcomeAppBar } from './app_bar'
 import { Hint } from './hints'
 import i18next from 'i18next'
 import { useTranslation } from 'react-i18next'
+import { WorldTocPanel } from './world_toc'
 
 
 /** the panel showing the game's introduction text */
@@ -124,7 +125,7 @@ function Welcome() {
             {(pageNumber == 0 ?
               <IntroductionPanel introduction={gameInfo.data?.introduction} setPageNumber={setPageNumber} />
             : pageNumber == 1 ?
-              <WorldTreePanel worlds={gameInfo.data?.worlds} worldSize={gameInfo.data?.worldSize}
+              <WorldTocPanel worlds={gameInfo.data?.worlds} worldToc={gameInfo.data?.worldToc} worldSize={gameInfo.data?.worldSize}
                 rulesHelp={rulesHelp} setRulesHelp={setRulesHelp} />
             :
               <InventoryPanel levelInfo={inventory?.data} />
@@ -133,7 +134,7 @@ function Welcome() {
         :
           <Split className="welcome" minSize={0} snapOffset={200}  sizes={[25, 50, 25]}>
             <IntroductionPanel introduction={gameInfo.data?.introduction} setPageNumber={setPageNumber} />
-            <WorldTreePanel worlds={gameInfo.data?.worlds} worldSize={gameInfo.data?.worldSize}
+            <WorldTocPanel worlds={gameInfo.data?.worlds} worldToc={gameInfo.data?.worldToc} worldSize={gameInfo.data?.worldSize}
               rulesHelp={rulesHelp} setRulesHelp={setRulesHelp} />
             <InventoryPanel levelInfo={inventory?.data} />
           </Split>
