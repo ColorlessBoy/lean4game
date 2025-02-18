@@ -2,7 +2,7 @@
  * @fileOverview Define the menu displayed with the tree of worlds on the welcome page
 */
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Slider, List, ListItem, ListItemText, Collapse, Box, ListItemButton } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -108,17 +108,35 @@ function topologicalSort(worlds: WorldType) {
 }
 
 /** World list item component */
-function WorldListItem({worldId, title, levelTitles, completedLevels, difficulty, worldSize} : {
+function WorldListItem({worldId, title, levelTitles, completedLevels, difficulty, worldSize, onNavigate} : {
   worldId: string,
   title: string,
   levelTitles: WorldTocType,
   completedLevels: number[],
   difficulty: number,
-  worldSize: number
+  worldSize: number,
+  onNavigate?: () => void
 }) {
-  const [expanded, setExpanded] = React.useState(false)
   const { t } = useTranslation()
   const gameId = React.useContext(GameIdContext)
+  const location = useLocation()
+
+  // 检查是否有任何子关卡是当前激活的
+  const hasActiveLevel = React.useMemo(() => {
+    return Array.from({length: worldSize}, (_, i) => i + 1).some(level =>
+      location.pathname === `/${gameId}/world/${worldId}/level/${level}`
+    )
+  }, [location.pathname, gameId, worldId, worldSize])
+
+  // 如果有激活的子关卡，则自动展开
+  const [expanded, setExpanded] = React.useState(hasActiveLevel)
+
+  // 当hasActiveLevel变化时更新expanded状态
+  React.useEffect(() => {
+    if (hasActiveLevel) {
+      setExpanded(true)
+    }
+  }, [hasActiveLevel])
 
   // index `0` indicates that all prerequisites are completed
   const unlocked = completedLevels[0]
@@ -138,14 +156,25 @@ function WorldListItem({worldId, title, levelTitles, completedLevels, difficulty
     marginBottom: '8px'
   }
 
-  const levelStyle = (level: number) => ({
-    backgroundColor: completedLevels[level] ? green : unlocked ? blue : grey,
-    color: 'white',
-    margin: '4px',
-    borderRadius: '4px',
-    opacity: difficulty >= 2 && !(completedLevels[level] || completedLevels[level-1]) ? 0.5 : 1
-  })
-  console.log("levelTitles", levelTitles)
+  const levelStyle = (level: number) => {
+    const isCurrentLevel = location.pathname === `/${gameId}/world/${worldId}/level/${level}`
+    return {
+      backgroundColor: isCurrentLevel ? '#ffd700' : completedLevels[level] ? green : unlocked ? blue : grey,
+      color: isCurrentLevel ? '#000' : 'white',
+      margin: '4px',
+      borderRadius: '4px',
+      opacity: difficulty >= 2 && !(completedLevels[level] || completedLevels[level-1]) ? 0.5 : 1,
+      boxShadow: isCurrentLevel ? '0 0 0 2px #fff' : 'none'
+    }
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (worldSize > 0) {
+      e.preventDefault()
+      setExpanded(!expanded)
+    }
+    onNavigate?.() // Call onNavigate if provided
+  }
 
   return (
     <Box sx={worldStyle}>
@@ -157,6 +186,7 @@ function WorldListItem({worldId, title, levelTitles, completedLevels, difficulty
             e.preventDefault()
             setExpanded(!expanded)
           }
+          onNavigate?.() // Call onNavigate to close sidebar
         }}
         aria-disabled={!playable}
       >
@@ -179,6 +209,7 @@ function WorldListItem({worldId, title, levelTitles, completedLevels, difficulty
                 : `/${gameId}/world/${worldId}/level/${level}`}
               sx={levelStyle(level)}
               aria-disabled={difficulty >= 2 && !(completedLevels[level] || completedLevels[level-1])}
+              onClick={() => onNavigate?.()} // Add onClick handler to close sidebar
             >
               <ListItemText primary={`${t(levelTitles[level.toString()] || 'untitled')}`} />
             </ListItemButton>
@@ -189,12 +220,14 @@ function WorldListItem({worldId, title, levelTitles, completedLevels, difficulty
   )
 }
 
-export function WorldTocPanel({worlds, worldToc, worldSize, rulesHelp, setRulesHelp}:
+export function WorldTocPanel({worlds, worldToc, worldSize, rulesHelp, setRulesHelp, setIsCollapsed, mobile}:
   { worlds: WorldType | null,
     worldToc: WorldTocType | null,
     worldSize: any,
     rulesHelp: boolean,
     setRulesHelp: any,
+    setIsCollapsed?: (value: boolean) => void,
+    mobile?: boolean
   }) {
   const gameId = React.useContext(GameIdContext)
   const difficulty = useSelector(selectDifficulty(gameId))
@@ -222,7 +255,7 @@ export function WorldTocPanel({worlds, worldToc, worldSize, rulesHelp, setRulesH
 
   return <div className="column">
     <WorldSelectionMenu rulesHelp={rulesHelp} setRulesHelp={setRulesHelp} />
-    <List sx={{width: '100%', maxWidth: 360}}>
+    <List sx={{width: '100%'}}>
       {sortedWorldIds.map(worldId => (
         <WorldListItem
           key={worldId}
