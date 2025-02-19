@@ -64,7 +64,7 @@ export function MenuButton({navOpen, setNavOpen}) {
 /** button to go one level futher.
  * for the last level, this button turns into a button going back to the welcome page.
  */
-function NextButton({worldSize, difficulty, completed, setNavOpen}) {
+export function NextButton({worldSize, difficulty, completed, setNavOpen}) {
   const { t } = useTranslation()
   const gameId = React.useContext(GameIdContext)
   const {worldId, levelId} = React.useContext(WorldLevelIdContext)
@@ -85,7 +85,7 @@ function NextButton({worldSize, difficulty, completed, setNavOpen}) {
 /** button to go one level back.
  * only renders if the current level id is > 0.
  */
-function PreviousButton({setNavOpen}) {
+export function PreviousButton({setNavOpen}) {
   const { t } = useTranslation()
   const gameId = React.useContext(GameIdContext)
   const {worldId, levelId} = React.useContext(WorldLevelIdContext)
@@ -100,7 +100,7 @@ function PreviousButton({setNavOpen}) {
 }
 
 /** button to toggle between editor and typewriter */
-function InputModeButton({setNavOpen, isDropdown}) {
+export function InputModeButton({setNavOpen, isDropdown}) {
   const { t } = useTranslation()
   const {levelId} = React.useContext(WorldLevelIdContext)
   const {typewriterMode, setTypewriterMode, lockEditorMode} = React.useContext(InputModeContext)

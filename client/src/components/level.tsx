@@ -333,7 +333,6 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
     setIntroSize(lineNumbers >= 5 ? 45 : 25)
   }, [level, levelId, worldId, gameId, editor])
 
-
   useEffect(() => {
     // TODO: That's a problem if the saved proof contains an error
     // Reset command line input when loading a new level
@@ -342,6 +341,10 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
     // Load the selected help steps from the store
     setShowHelp(new Set(selectHelp(gameId, worldId, levelId)(store.getState())))
   }, [gameId, worldId, levelId])
+
+  useEffect(() => {
+    setTypewriterMode(mobile)
+  }, [mobile])
 
   useEffect(() => {
     if (!(typewriterMode && !lockEditorMode) && editor) {
@@ -402,12 +405,14 @@ function PlayableLevel({impressum, setImpressum, toggleInfo, togglePreferencesPo
                     </div>
                   </>
                 :
+                  <>
                   <Split minSize={0} snapOffset={200} sizes={[introSize, 40, 60-introSize]} className={`app-content level ${level.isLoading ? 'hidden' : ''}`}>
                     <ChatPanel lastLevel={lastLevel}/>
                     <ExercisePanel
                       codeviewRef={codeviewRef} />
                     <InventoryPanel levelInfo={level?.data} />
                   </Split>
+</>
                 }
               </MonacoEditorContext.Provider>
             </EditorContext.Provider>

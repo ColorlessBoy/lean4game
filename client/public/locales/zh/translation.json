@@ -69,6 +69,7 @@
   "Levels": "关卡",
   "Language": "语言",
   "Development notes": "开发笔记",
+  "Exercise": "练习",
   "Adding new games": "添加新游戏",
   "Funding": "资助",
   "<p>Do you want to delete your saved progress irreversibly?</p><p>(This deletes your proofs and your collected inventory. Saves from other games are not deleted.)</p>": "<p>您确定要永久删除您的游戏进度吗？</p><p>（此操作将删除您的所有证明和收集的定理与策略，但不会影响其他游戏的保存数据。）</p>",

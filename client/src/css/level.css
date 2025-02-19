@@ -44,6 +44,31 @@
 .exercise-statement {
   padding-top: 1em;
   padding-bottom: 1em;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .exercise-statement::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ccc;
+  }
+
+  .exercise-statement::after {
+    content: attr(data-content);
+    position: absolute;
+    top: -0.7em;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0 10px;
+    color: #666;
+    font-size: 0.9em;
+  }
 }
 
 .exercise-statement p {
@@ -232,12 +257,12 @@ td code  {
   height: 100%;
 } */
 
-.button-row.mobile {
+.button-row {
   margin: .5rem;
   padding-top: .2rem;
 }
 
-.button-row.mobile .btn {
+.button-row .btn {
   padding: .5em;
   border-radius: .2em;
   width: 100%;

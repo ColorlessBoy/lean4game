@@ -32,8 +32,6 @@ function Markdown(props) {
       components={{
         a: ({ href, ...props }) => {
           // 如果是相对路径，拼接当前的URL（包括hash部分）
-          console.log("markdown currentUrl", currentUrl)
-          console.log("markdown href", href)
           return <a href={currentUrl + href} {...props} />;
         },
         ul: ({ node, ...props }) => (

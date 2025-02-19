@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import { Layout as AntLayout, Button, Avatar } from 'antd'
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, CloseOutlined } from '@ant-design/icons'
 import { WorldTocPanel } from '../world_toc'
-import { PreferencesContext } from '../infoview/context'
+import { InputModeContext, PreferencesContext } from '../infoview/context'
+import { useLocation, useParams } from 'react-router-dom'
 
 const { Header, Sider, Content } = AntLayout
 
@@ -29,6 +30,25 @@ export function Layout({
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [touchStart, setTouchStart] = useState(null)
   const { mobile } = React.useContext(PreferencesContext)
+  const location = useLocation()
+  const params = useParams()
+
+  // 从URL中获取worldId和levelId
+  const pathParts = location.pathname.split('/')
+  const worldId = pathParts.find((_, index) => pathParts[index - 1] === 'world')
+  const levelId = pathParts.find((_, index) => pathParts[index - 1] === 'level')
+  const gameId = params.owner && params.repo ? `g/${params.owner}/${params.repo}` : ''
+
+  const {typewriterMode, lockEditorMode} = React.useContext(InputModeContext)
+  console.log("typewriterMode:", typewriterMode)
+  console.log("lockEditorMode:", lockEditorMode)
+
+
+  // 获取当前世界和关卡的标题
+  const currentWorld = worlds?.nodes[worldId]
+  const worldTitle = currentWorld?.title || ''
+  const levelTitle = worldId && worldToc?.[worldId]?.[levelId] || ''
+  const displayTitle = levelTitle ? `${worldTitle} - ${levelTitle}` : worldTitle
 
   const handleTouchStart = (e) => {
     setTouchStart(e.touches[0].clientX)
@@ -164,6 +184,16 @@ export function Layout({
               />
             )}
           </div>
+          <div style={{
+            flex: 1,
+            textAlign: 'center',
+            color: '#fff',
+            fontSize: '18px',
+            fontWeight: 500
+          }}>
+            {displayTitle}
+          </div>
+          <div style={{ width: 32 }} />
         </Header>
         <Content style={{
           margin: 0,

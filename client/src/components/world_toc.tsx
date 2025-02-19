@@ -229,14 +229,20 @@ function WorldListItem({
           onNavigate?.(); // Call onNavigate to close sidebar
         }}
         aria-disabled={!playable}
+        sx={{ display: 'flex', justifyContent: 'space-between' }}
       >
-        {worldSize > 0 && (
-          <FontAwesomeIcon
-            icon={expanded ? faChevronDown : faChevronRight}
-            style={{ marginRight: "8px" }}
-          />
-        )}
-        <ListItemText primary={title || worldId} />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {worldSize > 0 && (
+            <FontAwesomeIcon
+              icon={expanded ? faChevronDown : faChevronRight}
+              style={{ marginRight: "8px" }}
+            />
+          )}
+          <ListItemText primary={title || worldId} />
+        </div>
+        <div style={{ marginLeft: '8px', opacity: 0.8 }}>
+          {completedLevels.slice(1).filter(Boolean).length}/{worldSize}
+        </div>
       </ListItemButton>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
