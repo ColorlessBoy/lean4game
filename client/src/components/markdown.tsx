@@ -10,8 +10,11 @@ import katex from "katex";
 import "katex/dist/katex.css";
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import { useLocation } from "react-router-dom";
 
 function Markdown(props) {
+  const { pathname, hash } = useLocation(); // 获取当前的路径和hash
+  const currentUrl = window.location.origin + '/#' + pathname; // 完整的URL（包括路径和hash）
   const newProps = {
     ...props,
     remarkPlugins: [...(props.remarkPlugins ?? []), gfm, remarkMath],
@@ -27,6 +30,12 @@ function Markdown(props) {
         padding: 0,
       }}
       components={{
+        a: ({ href, ...props }) => {
+          // 如果是相对路径，拼接当前的URL（包括hash部分）
+          console.log("markdown currentUrl", currentUrl)
+          console.log("markdown href", href)
+          return <a href={currentUrl + href} {...props} />;
+        },
         ul: ({ node, ...props }) => (
           <ul {...props} style={{ paddingLeft: "0px" }} />
         ),

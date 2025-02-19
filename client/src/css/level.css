@@ -281,14 +281,15 @@ td code  {
   margin-right: .5em;
 }
 
+/*
 .chat .recent {
   box-shadow: .0em .0em .4em .1em #8cbbe9;
 }
 
 .exercise .step.selected .goal-tabs, .chat .selected {
-  /* border: 3px solid #5191d1; */
   box-shadow: .0em .0em .4em .1em var(--clr-primary);
 }
+*/
 
 .introduction-panel {
   max-width: 900px;
