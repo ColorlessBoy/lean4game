@@ -28,6 +28,12 @@ function App() {
     i18n.changeLanguage(language)
   }, [language])
 
+  React.useEffect(() => {
+    if (gameInfo.data?.title) {
+      document.title = gameInfo.data.title
+    }
+  }, [gameInfo.data?.title])
+
   return (
     <div className="app">
       <GameIdContext.Provider value={gameId}>
