@@ -21,7 +21,6 @@ let root_object: RouteObject = single_game ? {
   loader: () => redirect("/g/local/game")
 } : {
   path: "/",
-  element: <App />,
   errorElement: <ErrorPage />,
   children: [
     {
@@ -33,16 +32,6 @@ let root_object: RouteObject = single_game ? {
 
 const router = createHashRouter([
   root_object,
-  {
-    // For backwards compatibility
-    path: "/game/nng",
-    loader: () => redirect("/g/leanprover-community/nng4")
-  },
-  {
-    // For backwards compatibility
-    path: "/g/hhu-adam/NNG4",
-    loader: () => redirect("/g/leanprover-community/nng4")
-  },
   {
     path: "/g/:owner/:repo",
     element: <App />,

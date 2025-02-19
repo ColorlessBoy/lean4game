@@ -61,9 +61,9 @@ export function WorldSelectionMenu({ rulesHelp, setRulesHelp }) {
     <Segmented
       value={difficulty}
       options={[
-        { label: label(0), value: 0 },
-        { label: label(1), value: 1 },
         { label: label(2), value: 2 },
+        { label: label(1), value: 1 },
+        { label: label(0), value: 0 },
       ]}
       onChange={(value: number) => {
         dispatch(changedDifficulty({ game: gameId, difficulty: value }));

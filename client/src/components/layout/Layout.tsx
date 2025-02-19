@@ -129,7 +129,7 @@ export function Layout({
       )}
       <AntLayout style={{
         marginLeft: showSidebar && !isCollapsed && !mobile ? 300 : 0,
-        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s',
         minHeight: '100vh',
         position: 'relative'
       }}>

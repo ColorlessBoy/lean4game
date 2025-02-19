@@ -1,11 +1,5 @@
 {
-  "allGames": [
-    "leanprover-community/nng4",
-    "hhu-adam/robo",
-    "djvelleman/stg4",
-    "trequetrum/lean4game-logic",
-    "jadabouhawili/knightsandknaves-lean4game"
-  ],
+  "allGames": [],
 
   "languages": [
     {
