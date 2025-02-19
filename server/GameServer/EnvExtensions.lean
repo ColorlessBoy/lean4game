@@ -405,7 +405,9 @@ def getLevelsToc (levels : HashMap Nat GameLevel) : Json := Id.run do
 
 def getGameJson (game : «Game») : Json := Id.run do
   let gameJson : Json := toJson game
-  -- Add world sizes to Json object
+  -- Print titles of all worlds
+  for (name, world) in game.worlds.nodes.toList do
+    let _ ← IO.println s!"World {name} title: {world.title}"
   let worldSize := game.worlds.nodes.toList.map (fun (n, w) => (n.toString, w.levels.size))
   let worldToc := game.worlds.nodes.toList.map (fun (n, w) => (n.toString, getLevelsToc w.levels))
   let gameJson := gameJson.mergeObj (Json.mkObj [("worldSize", Json.mkObj worldSize), ("worldToc", Json.mkObj worldToc)])
@@ -425,6 +427,7 @@ def GameLevel.merge (_old : GameLevel) (new : GameLevel) : GameLevel :=
 
 def World.merge (old : World) (new : World) : World :=
 { new with
+  title := if new.title = default then old.title else new.title
   levels := HashMap.merge old.levels new.levels GameLevel.merge}
 
 def Game.merge (old : Game) (new : Game) : Game :=

@@ -37,7 +37,8 @@ function App() {
             worldToc={gameInfo.data?.worldToc}
             worldSize={gameInfo.data?.worldSize}
             rulesHelp={rulesHelp}
-            setRulesHelp={setRulesHelp}>
+            setRulesHelp={setRulesHelp}
+            gameTitle={gameInfo.data?.title}>
             <React.Suspense>
               <Outlet />
             </React.Suspense>

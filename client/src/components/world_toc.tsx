@@ -189,14 +189,12 @@ function WorldListItem({
     const isCurrentLevel =
       location.pathname === `/${gameId}/world/${worldId}/level/${level}`;
     return {
-      backgroundColor: isCurrentLevel
-        ? "#ffd700"
-        : completedLevels[level]
+      backgroundColor:
+        completedLevels[level]
         ? green
-        : unlocked
-        ? blue
+        : unlocked ? blue
         : grey,
-      color: isCurrentLevel ? "#000" : "white",
+      color: "white",
       margin: "4px",
       borderRadius: "4px",
       opacity:

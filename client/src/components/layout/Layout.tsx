@@ -16,6 +16,7 @@ interface LayoutProps {
   worldSize?: any
   rulesHelp?: boolean
   setRulesHelp?: (value: boolean) => void
+  gameTitle?: string
 }
 
 export function Layout({
@@ -25,7 +26,8 @@ export function Layout({
   worldToc,
   worldSize,
   rulesHelp,
-  setRulesHelp
+  setRulesHelp,
+  gameTitle
 }: LayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [touchStart, setTouchStart] = useState(null)
@@ -89,12 +91,27 @@ export function Layout({
             bottom: 0,
             zIndex: mobile ? 1001 : 1,
             transform: `translateX(${isCollapsed ? '-300px' : '0'})`,
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: "var(--clr-primary-dark)"
           }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
+          {gameTitle && (
+            <div style={{
+              padding: '20px 16px',
+              color: '#fff',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              background: 'rgba(0, 0, 0, 0.2)',
+              marginBottom: '20px',
+              wordBreak: 'break-word'
+            }}>
+              {gameTitle}
+            </div>
+          )}
           {mobile && (
             <Button
               type="primary"
@@ -115,7 +132,7 @@ export function Layout({
               }}
             />
           )}
-          <div style={{ padding: 16, paddingTop: 80 }}>
+          <div style={{ padding: 16, paddingTop: 0 }}>
             <WorldTocPanel
               worlds={worlds}
               worldToc={worldToc}
@@ -156,7 +173,7 @@ export function Layout({
 
         <Header style={{
           padding: '0 12px',
-          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          background: 'var(--clr-primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
