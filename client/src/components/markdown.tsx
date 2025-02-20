@@ -39,6 +39,9 @@ function Markdown(props) {
         ),
         code: Code,
       }}
+      wrapperElement={{
+        "data-color-mode": "light"
+      }}
     />
   );
 }
