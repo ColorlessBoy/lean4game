@@ -18,7 +18,7 @@ import './i18n';
 let single_game = (import.meta.env.VITE_LEAN4GAME_SINGLE == "true")
 let root_object: RouteObject = single_game ? {
   path: "/",
-  loader: () => redirect("/g/local/game")
+  loader: () => redirect("/g/colorlessboy/lean4quickstart")
 } : {
   path: "/",
   errorElement: <ErrorPage />,
