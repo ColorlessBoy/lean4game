@@ -19,10 +19,7 @@ import { spawn } from 'child_process'
  * IMPORTANT! Tags here need to be lower case!
 */
 const queueLength = {
-  "g/hhu-adam/robo": 2,
-  "g/leanprover-community/nng4": 5,
-  "g/djvelleman/stg4": 2,
-  "g/trequetrum/lean4game-logic": 2,
+  "g/Colorlessboy/lean4quickstart": 100
 }
 
 const __filename = url.fileURLToPath(import.meta.url);
@@ -134,27 +131,24 @@ function getGameDir(owner, repo) {
 }
 
 function startServerProcess(owner, repo) {
-
   let game_dir = getGameDir(owner, repo)
   if (!game_dir) return;
 
-  let serverProcess
-  if (isDevelopment) {
+  let serverProcess;
+  const isMacOS = os.platform() === 'darwin';
+
+  if (isDevelopment || isMacOS) {
     let args = ["--server", game_dir]
-    // let binDir = path.join(game_dir, ".lake", "packages", "GameServer", "server", ".lake", "build", "bin")
     let binDir = path.join(__dirname, "..", "server", ".lake", "build", "bin")
-    // Note: `cwd` is important to be the `bin` directory as `Watchdog` calls `./gameserver` again
     if (fs.existsSync(binDir)) {
-      // Try to use the game's own copy of `gameserver`.
       serverProcess = cp.spawn("./gameserver", args, { cwd: binDir })
     } else {
-      // If the game is built with `-Klean4game.local` there is no copy in the lake packages.
-      binDir = path.join(__dirname, "..", "server", ".lake", "build", "bin")
-      serverProcess = cp.spawn("./gameserver", args, { cwd: binDir })
+      console.error(`Binary directory not found: ${binDir}`)
+      return null;
     }
   } else {
-    serverProcess =  cp.spawn("./bubblewrap.sh",
-      [ game_dir, path.join(__dirname, '..')],
+    serverProcess = cp.spawn("./bubblewrap.sh",
+      [game_dir, path.join(__dirname, '..')],
       { cwd: __dirname })
   }
 
@@ -166,7 +160,7 @@ function startServerProcess(owner, repo) {
       console.error(`Lean Server: ${data}`)
     )
   }
-  return serverProcess
+  return serverProcess;
 }
 
 /** start Lean Server processes to refill the queue */

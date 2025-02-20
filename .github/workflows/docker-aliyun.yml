@@ -1,0 +1,31 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches: [ build-aliyun ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Aliyun Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: registry.cn-hangzhou.aliyuncs.com
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            registry.cn-hangzhou.aliyuncs.com/colorlessboy/lean4game:latest
+            registry.cn-hangzhou.aliyuncs.com/colorlessboy/lean4game:${{ github.sha }}
+          cache-from: type=registry,ref=registry.cn-hangzhou.aliyuncs.com/colorlessboy/lean4game:buildcache
+          cache-to: type=registry,ref=registry.cn-hangzhou.aliyuncs.com/colorlessboy/lean4game:buildcache,mode=max
