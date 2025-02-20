@@ -42,6 +42,7 @@
 }
 
 .exercise-statement {
+  margin-top: 2rem;
   padding-top: 1em;
   padding-bottom: 1em;
   position: relative;
@@ -51,7 +52,7 @@
   .exercise-statement::before {
     content: "";
     position: absolute;
-    top: 0;
+    top: 0rem;
     left: 0;
     right: 0;
     height: 1px;

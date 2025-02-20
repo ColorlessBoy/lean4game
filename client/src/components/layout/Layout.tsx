@@ -4,7 +4,7 @@ import { Layout as AntLayout, Button, Avatar } from 'antd'
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, CloseOutlined } from '@ant-design/icons'
 import { WorldTocPanel } from '../world_toc'
 import { InputModeContext, PreferencesContext } from '../infoview/context'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, Link } from 'react-router-dom'
 
 const { Header, Sider, Content } = AntLayout
 
@@ -14,6 +14,7 @@ interface LayoutProps {
   worlds?: any
   worldToc?: any
   worldSize?: any
+  sortedWorldIds?: string[]
   rulesHelp?: boolean
   setRulesHelp?: (value: boolean) => void
   gameTitle?: string
@@ -25,6 +26,7 @@ export function Layout({
   worlds,
   worldToc,
   worldSize,
+  sortedWorldIds,
   rulesHelp,
   setRulesHelp,
   gameTitle
@@ -40,11 +42,6 @@ export function Layout({
   const worldId = pathParts.find((_, index) => pathParts[index - 1] === 'world')
   const levelId = pathParts.find((_, index) => pathParts[index - 1] === 'level')
   const gameId = params.owner && params.repo ? `g/${params.owner}/${params.repo}` : ''
-
-  const {typewriterMode, lockEditorMode} = React.useContext(InputModeContext)
-  console.log("typewriterMode:", typewriterMode)
-  console.log("lockEditorMode:", lockEditorMode)
-
 
   // 获取当前世界和关卡的标题
   const currentWorld = worlds?.nodes[worldId]
@@ -73,6 +70,12 @@ export function Layout({
     setTouchStart(null)
   }
 
+  useEffect(() => {
+    if(!worldId && !levelId) {
+      setIsCollapsed(false)
+    }
+  }, [worldId, levelId])
+
   return (
     <AntLayout style={{ height: '100vh', overflow: 'hidden' }}>
       {showSidebar && (
@@ -99,18 +102,22 @@ export function Layout({
           onTouchEnd={handleTouchEnd}
         >
           {gameTitle && (
-            <div style={{
-              padding: '20px 16px',
-              color: '#fff',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              background: 'rgba(0, 0, 0, 0.2)',
-              marginBottom: '20px',
-              wordBreak: 'break-word'
-            }}>
-              {gameTitle}
-            </div>
+            <Link to={`/${gameId}`} style={{ textDecoration: 'none' }}>
+              <div style={{
+                padding: '20px 16px',
+                color: '#fff',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                background: 'rgba(0, 0, 0, 0.2)',
+                marginBottom: '20px',
+                wordBreak: 'break-word',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s'
+              }}>
+                {gameTitle}
+              </div>
+            </Link>
           )}
           {mobile && (
             <Button
@@ -137,6 +144,7 @@ export function Layout({
               worlds={worlds}
               worldToc={worldToc}
               worldSize={worldSize}
+              sortedWorldIds={sortedWorldIds}
               rulesHelp={rulesHelp}
               setRulesHelp={setRulesHelp}
               setIsCollapsed={setIsCollapsed}

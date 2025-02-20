@@ -85,47 +85,6 @@ export function WorldSelectionMenu({ rulesHelp, setRulesHelp }) {
   );
 }
 
-/** Perform topological sort on the worlds graph */
-function topologicalSort(worlds: WorldType) {
-  const visited = new Set();
-  const temp = new Set();
-  const order: string[] = [];
-  const graph = new Map();
-
-  // Build adjacency list
-  for (const id in worlds.nodes) {
-    graph.set(id, []);
-  }
-  for (const [source, target] of worlds.edges) {
-    graph.get(source).push(target);
-  }
-
-  function visit(id: string): boolean {
-    if (temp.has(id)) return false; // Found cycle
-    if (visited.has(id)) return true;
-
-    temp.add(id);
-
-    const neighbors = graph.get(id) || [];
-    for (const next of neighbors) {
-      if (!visit(next)) return false;
-    }
-
-    temp.delete(id);
-    visited.add(id);
-    order.unshift(id);
-    return true;
-  }
-
-  for (const id in worlds.nodes) {
-    if (!visited.has(id) && !visit(id)) {
-      console.error("Cycle detected in worlds graph");
-      return Object.keys(worlds.nodes); // Fallback to unsorted list
-    }
-  }
-
-  return order;
-}
 
 /** World list item component */
 function WorldListItem({
@@ -275,6 +234,7 @@ function WorldListItem({
 export function WorldTocPanel({
   worlds,
   worldToc,
+  sortedWorldIds,
   worldSize,
   rulesHelp,
   setRulesHelp,
@@ -283,6 +243,7 @@ export function WorldTocPanel({
 }: {
   worlds: WorldType | null;
   worldToc: WorldTocType | null;
+  sortedWorldIds: string[];
   worldSize: any;
   rulesHelp: boolean;
   setRulesHelp: any;
@@ -291,9 +252,6 @@ export function WorldTocPanel({
 }) {
   const gameId = React.useContext(GameIdContext);
   const difficulty = useSelector(selectDifficulty(gameId));
-
-  // Get sorted world IDs based on dependencies
-  const sortedWorldIds = worlds ? topologicalSort(worlds) : [];
 
   // Track completion status for each world
   const completed = {};
@@ -322,7 +280,7 @@ export function WorldTocPanel({
     <div className="column">
       <WorldSelectionMenu rulesHelp={rulesHelp} setRulesHelp={setRulesHelp} />
       <List sx={{ width: "100%" }}>
-        {sortedWorldIds.map((worldId) => (
+        {sortedWorldIds?.map((worldId) => (
           <WorldListItem
             key={worldId}
             worldId={worldId}

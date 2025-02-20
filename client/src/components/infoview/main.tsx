@@ -104,6 +104,9 @@ export function DualEditor({
   levelId,
   worldId,
   worldSize,
+  lastLevel,
+  lastWorld,
+  nextWorldId,
 }) {
   const ec = React.useContext(EditorContext);
   const { typewriterMode, lockEditorMode } = React.useContext(InputModeContext);
@@ -119,6 +122,9 @@ export function DualEditor({
           levelId={levelId}
           level={level}
           worldSize={worldSize}
+          lastLevel={lastLevel}
+          lastWorld={lastWorld}
+          nextWorldId={nextWorldId}
         />
       ) : (
         // TODO: Style this if relevant.
@@ -134,11 +140,17 @@ function DualEditorMain({
   levelId,
   level,
   worldSize,
+  lastLevel,
+  lastWorld,
+  nextWorldId,
 }: {
   worldId: string;
   levelId: number;
   level: LevelInfo;
   worldSize: number;
+  lastLevel: boolean;
+  lastWorld: boolean;
+  nextWorldId: string;
 }) {
   const ec = React.useContext(EditorContext);
   const gameId = React.useContext(GameIdContext);
@@ -210,6 +222,9 @@ function DualEditorMain({
                     level={levelId}
                     data={level}
                     worldSize={worldSize}
+                    lastLevel={lastLevel}
+                    lastWorld={lastWorld}
+                    nextWorldId={nextWorldId}
                   />
                 ) : (
                   <Main
@@ -245,7 +260,7 @@ function ExerciseStatement({ data, showLeanStatement = false }) {
   }
   return (
     <>
-      <div className="exercise-statement" data-content={t('Exercise')}>
+      <div className="exercise-statement" data-content={t("Exercise")}>
         {data?.descrText && (
           <Markdown>
             {(data?.displayName
@@ -544,6 +559,9 @@ export function TypewriterInterfaceWrapper(props: {
   level: number;
   data: LevelInfo;
   worldSize: number;
+  lastLevel: boolean;
+  lastWorld: boolean;
+  nextWorldId: string;
 }) {
   const ec = React.useContext(EditorContext);
   const gameId = React.useContext(GameIdContext);
@@ -870,10 +888,17 @@ export function TypewriterInterface({ props }) {
                   )}
                   {mobile && proof?.completed && (
                     <div className="button-row mobile">
-                      {props.level >= props.worldSize ? (
+                      {props.lastWorld ? (
                         <Button to={`/${gameId}`}>
                           <FontAwesomeIcon icon={faHome} />
                           &nbsp;{t("Leave World")}
+                        </Button>
+                      ) : props.lastLevel ? (
+                        <Button
+                          to={`/${gameId}/world/${props.nextWorldId}/level/1`}
+                        >
+                          {t("Next")}&nbsp;
+                          <FontAwesomeIcon icon={faArrowRight} />
                         </Button>
                       ) : (
                         <Button

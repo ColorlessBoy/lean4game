@@ -42,6 +42,7 @@ function App() {
             worlds={gameInfo.data?.worlds}
             worldToc={gameInfo.data?.worldToc}
             worldSize={gameInfo.data?.worldSize}
+            sortedWorldIds={gameInfo.data?.worldSort}
             rulesHelp={rulesHelp}
             setRulesHelp={setRulesHelp}
             gameTitle={gameInfo.data?.title}>
