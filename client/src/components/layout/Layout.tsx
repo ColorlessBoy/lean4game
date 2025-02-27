@@ -151,6 +151,26 @@ export function Layout({
               mobile={mobile}
             />
           </div>
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            padding: '10px',
+            textAlign: 'center',
+            fontSize: '12px',
+            color: 'rgba(255, 255, 255, 0.65)',
+            background: 'rgba(0, 0, 0, 0.2)'
+          }}>
+            <a
+              href={import.meta.env.VITE_ICP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'rgba(255, 255, 255, 0.65)' }}
+            >
+              {import.meta.env.VITE_ICP_NUMBER}
+            </a>
+          </div>
         </Sider>
       )}
       {mobile && !isCollapsed && (
